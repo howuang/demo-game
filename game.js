@@ -5,12 +5,12 @@
 // [x] As a player, if I move the hero off the canvas to the bottom, the hero appears on the top.
 // [x] As a player, if I catch a monster then the monster is randomly placed on the screen.
 // [x] As a player, I see my score update when I catch a monster.
-// [ ] As a player, I can see an input.
+// [x] As a player, I can see an input.
 // [ ] As a player, I can put my name into the input and then submit it to see my name on the screen.
 // [x] As a player, I have 15 seconds to catch as many monsters as I can.
-// [ ] As a player, if the timer runs out I cannot move my hero anymore.
-// [ ] As a player, if the timer runs out I can see a reset button.
-// [ ] As a player, if the timer runs out I can press the reset button and start the game over.
+// [x] As a player, if the timer runs out I cannot move my hero anymore.
+// [x] As a player, if the timer runs out I can see a reset button.
+// [x] As a player, if the timer runs out I can press the reset button and start the game over.
 // [ ] As a player, if my score is higher than the previous high score then my score replaces it.
 // [ ] As a player, I can see the history of last scores.
 /*
@@ -35,13 +35,23 @@ const highScore = document.getElementById('highScore')
 const timer = document.getElementById('timer');
 const currentScore = document.getElementById('currentScore')
 const startBtn = document.getElementById('startBtn')
-let playerName = document.getElementById('playerName')
-const currentPlayer = document.getElementById('currentPlayer')
+const playerName = document.getElementById('playerName')
 const modalEl = document.getElementById('modalEl')
 const modalEl2 = document.getElementById('modalEl2')
 const resetBtn = document.getElementById('playAgain')
 let bg = {};
 modalEl2.style.display = 'none';
+
+const applicationState = {
+	isGameOver: false,
+	currentUser: null,
+	highScore: {
+	  score: 0,
+	  user: null,
+	  date: null,
+	},
+	gameHistory: [{ user: null, score: 0, date: null }],
+  };
 
 /**
  * Setting up our characters.
@@ -133,6 +143,8 @@ function setupKeyboardListeners() {
  *
  *  If you change the value of 5, the player will move at a different rate.
  */
+
+
 let update = function () {
 	// Update the time.
 	elapsedTime = Math.floor((Date.now() - startTime) / 1000);
@@ -173,7 +185,6 @@ let update = function () {
 			score +=10;
 			currentScore.innerHTML = score;
 		}
-
 	});
 };
 
@@ -194,27 +205,41 @@ function draw() {
 			ctx.drawImage(monster.image, monster.x, monster.y);
 		}
 	});
-	let remainningTime = SECONDS_PER_ROUND - elapsedTime
+	let remainningTime = SECONDS_PER_ROUND - elapsedTime;
 	timer.innerHTML = remainningTime;
+	if (playerName.value !== ""){
+		ctx.fillText("Player: " + playerName.value,20,40)
+	}
 	playerName.value = "";
-	currentPlayer.innerHTML = playerName.value;
-	console.log(currentPlayer.innerHTML)
+}
+
+function restart(){
+	window.location.reload();
 }
 
 function gameOver(){
 	gameEnd = requestAnimationFrame(main);
 	if (SECONDS_PER_ROUND - elapsedTime == 0){
 		cancelAnimationFrame(gameEnd);
+		applicationState.isGameOver = true;
+		modalEl2.style.display = "flex";
+		highScore.innerHTML = score;
 	}
 	finalScore.innerHTML = score;
-	resetBtn.addEventListener("click", function(){})
+	resetBtn.addEventListener("click", restart)
 }
+
 
 /**
  * The main game loop. Most every game will have two distinct parts:
  * update (updates the state of the game, in this case our hero and monster)
  * render (based on the state of our game, draw the right things)
  */
+startBtn.addEventListener("click", function(){
+	main();
+	modalEl.style.display = 'none';
+})
+
 function main() {
 	update();
 	draw();
@@ -235,10 +260,4 @@ loadImages();
 setupKeyboardListeners();
 // main();
 
-startBtn.addEventListener("click", function(){
-	main();
-	playerName.value = "";
-	modalEl.style.display = 'none';
-})
 
-resetBtn.addEventListener("click", function(){})

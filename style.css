@@ -16,7 +16,7 @@
 }
 
 .info{
-	width: 100%;
+	width: 512px;
 	display: flex;
 	justify-content: space-between;
 	font-size: 18px;
