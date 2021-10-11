@@ -6,7 +6,36 @@
 		<title>Best Game Ever!</title>
 	</head>
 	<body>
-		<div id="canvas"></div>
+		<div class="container">
+			<div class="info">
+				<div><span>Time remainning:</span><span id="timer">15</span></div>
+				<div><span>High Score:</span><span id="highScore">0</span></div>
+				<div><span>Score:</span><span id="currentScore">0</span></div>
+				<div><span>Player:</span><span id="currentPlayer"></span></div>
+			</div>			
+		</div>
+		<div id="canvas">
+			<div class="scoreContainer">
+				<div class="startGame" id="modalEl">
+					<div>
+						<h2>Please Put Your Name</h2>
+						<input type="text" id="playerName">
+						<div>
+							<button id="startBtn">Start Game</button>
+						</div>
+					</div>
+				</div>
+				<div class="endGameContainer" id="modalEl2">
+					<div class="endGame">
+					<div>
+						<h1 id="finalScore">0</h1>
+						<p>Points</p>
+						<button id="playAgain">Play Again</button>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
 		<script src="game.js"></script>
 	</body>
 </html>
